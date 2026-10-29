@@ -11,9 +11,9 @@
 
 # fluxo
 - chegou o trem na estação -> chama `station_load_car(struct station *station, int count)` OBS: count é a qunatidade de assentos disponíveis no trem/carro
-- station_load_car so retorna quando todos os assentos estiverem preenchidos/todos os passageiros sentados e ou vagão cheio (capaciadade maxima) ou todos os que estavam esperando vão entrar
+- station_load_car so retorna quando todos os assentos estiverem preenchidos/todos os passageiros sentados e ou vagão cheio (capaciadade maxima) ou todos os que estavam esperando vão entrar (assentos =0) ou quando ninguem esta esperando na estação (esperando = 0)
 - quando o passageiro chega na estação -> `station_wait_for_car(struct station* station)`
-- station_wait_for_car fica esperando o retorno de station_load_car, dizendo que o trem chegou na estação e retorna a quantidade de assentos disponiveis (não pode busy waiting)
+- station_wait_for_car fica esperando o retorno de station_load_car, dizendo que o trem chegou na estação e diz que ha assentos disponiveis (não pode busy waiting)
 - passageiro entra no trem
 - OBS: nao se preocupar na função de colocar o passageiro pra sentar nos assentos
 - quando o passageiro entrar -> `station_on_board(struct station *station)`
@@ -21,7 +21,7 @@
 
 
 # funções e structs
-- struct station -> char *nome, int passagers, struct train
+- struct station -> char *nome, int passagersEsperando, struct train, lock, passageirosEmbarcados
 - station_load_car(struct station *station, int count)
 - station_wait_for_car(struct station* station)
 - station_on_board(struct station *station)
@@ -42,10 +42,12 @@
 - não pode usar mais que um unico lock em cada station
 - nunca vai ter mais de um trem na estação
 - todos os carros e passageiros estão indo para o mesmo destino
-- passageiros podem embarcar ao mesmo tempo (parte da sincronização para não sobrescrever)
+- passageiros podem embarcar ao mesmo tempo (parte da sincronização para não sobrescrever) e em lote
 
 # duvidas
 - o sistema vai funcionar como uma simulação (sem o usuário interagir)? mostra um numero x de pessoas que vão embarcar nas estações e na saída só vai mostrar os logs?
 - precisa de sistema de desembarque?
 - o usuário precisa interagir com algo? (solicitar algo/selecionar alguma opção)
 - o número de assentos nos vagões e passageiros nas estações será definida no código ou será pelo usuário?
+- o sync_car-runner será o main ou é apenas um teste ou modelo de como se espera um main?
+- count em station_load_car (struct station *station, int count) é o total de assentos do vagão ou os assentos livres naquele momento?
